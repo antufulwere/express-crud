@@ -1,0 +1,1752 @@
+swagger: "2.0"
+info:
+  title: Arrow Up Backend
+  description: This is arrow up backend's typescript API's specification.
+  version: 1.0.0
+host: 31w9qqwi8h.execute-api.us-west-1.amazonaws.com/stage/user-management
+basePath: /api
+tags:
+  - name: Roles
+    description: Roles related API
+  - name: Users
+    description: Users related API
+  - name: Parent_Establishment
+    description: Parent Establishment related API
+  - name: Locations
+    description: Locations related API
+securityDefinitions:
+  Bearer:
+    description: Example value:- Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU5MmQwMGJhNTJjYjJjM
+    type: apiKey
+    name: Authorization
+    in: header
+paths:
+  "/v1/roles":
+    post:
+      tags:
+        - Roles
+      summary: Create a role
+      description: Create a role API
+      operationId: createRole
+      security:
+        - Bearer: []
+      produces:
+        - application/json
+      parameters:
+        - name: Role Details
+          in: body
+          required: true
+          description: "Role Details"
+          schema:
+            "$ref": "#/definitions/roleSchema"
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "201":
+          description: Role Information
+          schema:
+            "$ref": "#/definitions/RoleCreateSuccess"
+        "400":
+          description: Something went wrong
+    get:
+      tags:
+        - Roles
+      summary: Get All Roles
+      description: Get All Roles API
+      parameters:
+        - name: appRoles
+          description: "send this and value true in case of app"
+          in: query
+        - name: isLocationSpecific
+          description: "send this true and false in case of location add roles and management roles"
+          in: query
+      operationId: getRoles
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "200":
+          description: Roles fetched Successfully
+        "500":
+          description: Something went wrong
+      x-codegen-request-body-name: Role Information
+  "/v1/roles/{id}":
+    patch:
+      tags:
+        - Roles
+      summary: Update a role's password
+      description: Update a role API
+      operationId: UpdateRole
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          description: Role Id
+          required: true
+          schema:
+            type: integer
+        - name: Role Details
+          in: body
+          description: "Role Details"
+          schema:
+            "$ref": "#/definitions/roleUpdateSchema"
+          required: true
+      responses:
+        "200":
+          description: Role Information
+          content:
+            application/json:
+              schema:
+                "$ref": "#/definitions/RoleCreateSuccess"
+        "400":
+          description: Something went wrong
+        "401":
+          description: GEN-UNAUTHORIZED
+    delete:
+      tags:
+        - Roles
+      summary: Delete a role
+      description: Delete a role API
+      operationId: DeleteRole
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          description: Role Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Role deleted successfully
+        "401":
+          description: GEN-UNAUTHORIZED
+  "/v1/users":
+    post:
+      tags:
+        - Users
+      summary: Create a user
+      description: Create a user API
+      operationId: createUsers
+      security:
+        - Bearer: []
+      parameters:
+        - name: User Details
+          description: "User Details"
+          in: body
+          schema:
+            "$ref": "#/definitions/userSchema"
+          required: true
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "201":
+          description: User Response
+          schema:
+            "$ref": "#/definitions/CreateSuccess"
+        "400":
+          description: Something went wrong
+    get:
+      tags:
+        - Users
+      summary: Get All Users
+      description: Get All Users API
+      operationId: getUsers
+      security:
+        - Bearer: []
+      parameters:
+        - name: type
+          description: "Id of user role"
+          in: query
+        - name: query
+          description: "Search filter"
+          in: query
+        - name: page_no
+          description: "Page no"
+          in: query
+        - name: page_size
+          description: "Page Size"
+          in: query
+        - name: isLocationSpecific
+          description: "send true false for location or management user list respectively"
+          in: query
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "200":
+          description: Users fetched Successfully
+        "500":
+          description: Something went wrong
+      x-codegen-request-body-name: User Information
+  "/v1/users/{id}":
+    patch:
+      tags:
+        - Users
+      summary: Update a user's details
+      description: Update a user API
+      operationId: UpdateUser
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          description: User Id
+          required: true
+          schema:
+            type: integer
+        - name: User Details
+          in: body
+          description: User Details
+          schema:
+            "$ref": "#/definitions/userUpdateSchema"
+          required: true
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "200":
+          description: User Information
+          schema:
+            "$ref": "#/definitions/CreateSuccess"
+        "400":
+          description: Something went wrong
+    get:
+      tags:
+        - Users
+      summary: Get a user's details
+      description: Get a user API
+      operationId: GetUser
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          description: User Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "200":
+          description: User Information
+          schema:
+            "$ref": "#/definitions/CreateSuccess"
+        "400":
+          description: Something went wrong
+  "/v1/users/login":
+    post:
+      tags:
+        - Users
+      summary: Login a user
+      description: Login a user API
+      operationId: LoginUser
+      parameters:
+        - name: User Details
+          in: body
+          description: "Role Details"
+          schema:
+            "$ref": "#/definitions/userLoginSchema"
+          required: true
+      responses:
+        "200":
+          description: User Information
+          schema:
+            "$ref": "#/definitions/CreateSuccess"
+        "400":
+          description: Something went wrong
+  "/v1/users/{id}/_reset-password":
+    patch:
+      tags:
+        - Users
+      summary: Reset a user password
+      description: Reset a user password API
+      operationId: ResetUserPassword
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          description: User Id
+          required: true
+          schema:
+            type: integer
+        - name: Password Details
+          in: body
+          description: Password Details
+          schema:
+            "$ref": "#/definitions/passwordUpdateSchema"
+          required: true
+      responses:
+        "200":
+          description: User Information
+          schema:
+            "$ref": "#/definitions/RoleCreateSuccess"
+        "401":
+          description: GEN-UNAUTHORIZED
+        "400":
+          description: Something went wrong
+  "/v1/users/{id}/_change-password":
+    patch:
+      tags:
+        - Users
+      summary: Change a user password
+      description: Change a user password API
+      operationId: ChangeUserPassword
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          description: User Id
+          required: true
+          schema:
+            type: integer
+        - name: Password Details
+          in: body
+          description: Password Details
+          schema:
+            "$ref": "#/definitions/passwordChangeSchema"
+          required: true
+      responses:
+        "200":
+          description: User Information
+          schema:
+            "$ref": "#/definitions/RoleCreateSuccess"
+        "401":
+          description: GEN-UNAUTHORIZED
+        "400":
+          description: Something went wrong
+  "/v1/users/{id}/logout":
+    delete:
+      tags:
+        - Users
+      summary: Logout a user
+      description: Logout a user API
+      operationId: LogoutUser
+      parameters:
+        - name: id
+          in: path
+          description: User Id
+          required: true
+          schema:
+            type: integer
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: User Information
+          schema:
+            "$ref": "#/definitions/RoleCreateSuccess"
+        "400":
+          description: Something went wrong
+        "401":
+          description: GEN-UNAUTHORIZED
+  "/v1/users/{id}/profile":
+    get:
+      tags:
+        - Users
+      summary: Get details of user by token
+      description: Get details of user by token API
+      operationId: GetUserByToken
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          description: User Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User Information
+          schema:
+            "$ref": "#/definitions/RoleCreateSuccess"
+        "401":
+          description: GEN-UNAUTHORIZED
+        "204":
+          description: User not found
+  "/v1/users/positions":
+    get:
+      tags:
+        - Users
+      summary: Get positions of user
+      description: Get positions of user API
+      operationId: GetPositions
+      responses:
+        "200":
+          description: User Information
+          schema:
+            "$ref": "#/definitions/RoleCreateSuccess"
+        "401":
+          description: GEN-UNAUTHORIZED
+  "/v1/users/feedback":
+    post:
+      tags:
+        - Users
+      summary: Send feedback of user by token
+      description: Send feedback of user by token API
+      operationId: SendFeeback
+      parameters:
+        - name: feedback Details
+          in: body
+          description: feedback Details
+          schema:
+            "$ref": "#/definitions/feedBackData"
+          required: true
+      responses:
+        "200":
+          description: User Information
+          schema:
+            "$ref": "#/definitions/RoleCreateSuccess"
+        "401":
+          description: GEN-UNAUTHORIZED
+        "204":
+          description: User not found
+  "/v1/users/trainings/{id}":
+    get:
+      tags:
+        - Users
+      summary: Get trainings of user by id
+      description: Get trainings of user by id API
+      operationId: GetUserTrainingByToken
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          description: User Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User Information
+          schema:
+            "$ref": "#/definitions/RoleCreateSuccess"
+        "401":
+          description: GEN-UNAUTHORIZED
+        "204":
+          description: User not found
+  "/v1/users/checklists/{id}":
+    get:
+      tags:
+        - Users
+      summary: Get checklists of user by id
+      description: Get checklists of user by id API
+      operationId: GetUserChecklistsByToken
+      parameters:
+        - name: id
+          in: path
+          description: User Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User Information
+          schema:
+            "$ref": "#/definitions/RoleCreateSuccess"
+        "401":
+          description: GEN-UNAUTHORIZED
+        "204":
+          description: User not found
+  "/v1/users/{userId}/training/{id}":
+    get:
+      tags:
+        - Users
+      summary: Get trainings of user by id
+      description: Get trainings of user by id API
+      operationId: GetUserTrainingDetails
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          description: user training Id
+          required: true
+          schema:
+            type: integer
+        - name: userId
+          in: path
+          description: user Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User Information
+          schema:
+            "$ref": "#/definitions/RoleCreateSuccess"
+        "401":
+          description: GEN-UNAUTHORIZED
+        "204":
+          description: User not found
+
+  "/v1/users/training/{id}":
+    patch:
+      tags:
+        - Users
+      summary: Update a user's training
+      description: Update a user's training
+      operationId: UpdateUserTraining
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          description: user's training Id
+          required: true
+          schema:
+            type: integer
+        - name: Role Details
+          in: body
+          description: "Role Details"
+          schema:
+            "$ref": "#/definitions/userTrainingUpdateSchema"
+          required: true
+      responses:
+        "200":
+          description: Role Information
+          content:
+            application/json:
+              schema:
+                "$ref": "#/definitions/RoleCreateSuccess"
+        "400":
+          description: Something went wrong
+        "401":
+          description: GEN-UNAUTHORIZED
+
+  "/v1/users/checklist/{id}":
+    patch:
+      tags:
+        - Users
+      summary: Update a user's Checklist
+      description: Update a user's Checklist
+      operationId: UpdateUserChecklist
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          description: user's checklist Id
+          required: true
+          schema:
+            type: integer
+        - name: checklist Details
+          in: body
+          description: "Role Details"
+          schema:
+            "$ref": "#/definitions/userChecklistUpdateSchema"
+          required: true
+      responses:
+        "200":
+          description: checklist Information
+          content:
+            application/json:
+              schema:
+                "$ref": "#/definitions/RoleCreateSuccess"
+        "400":
+          description: Something went wrong
+        "401":
+          description: GEN-UNAUTHORIZED
+  "/v1/users/{id}/summary":
+    get:
+      tags:
+        - Users
+      summary: Get summary of user by id
+      description: Get summary of user by id API
+      operationId: GetUserSummaryDetails
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          description: user Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User Information
+          schema:
+            "$ref": "#/definitions/RoleCreateSuccess"
+        "401":
+          description: GEN-UNAUTHORIZED
+        "204":
+          description: User not found
+  "/v1/users/{userId}/_forgot-user-password":
+    get:
+      tags:
+        - Users
+      summary: Forgot User Password
+      description: Forgot User Password
+      operationId: Forgot User Password
+      parameters:
+        - name: userId
+          in: path
+          description: user Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Forgot User Password
+          schema:
+            "$ref": "#/definitions/RoleCreateSuccess"
+        "401":
+          description: GEN-UNAUTHORIZED
+        "204":
+          description: User not found
+  "/v1/users/{userId}/_check-answer":
+    patch:
+      tags:
+        - Users
+      summary: Check User Answer
+      description: User Answer API
+      operationId: UserAnswer
+      parameters:
+        - name: userId
+          in: path
+          description: User Id
+          required: true
+          schema:
+            type: integer
+        - name: Answer Details
+          in: body
+          description: Answer Details
+          schema:
+            "$ref": "#/definitions/userAnswerSchema"
+          required: true
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "200":
+          description: User Information
+          schema:
+            "$ref": "#/definitions/CreateSuccess"
+        "400":
+          description: Something went wrong
+  "/v1/user-establishments":
+    post:
+      tags:
+        - Users
+      summary: Create User Establishments
+      description: Create User Establishments by given user and establishment id
+      operationId: CreateUserEstablishment
+      security:
+        - Bearer: []
+      parameters:
+        - name: User Establishments Details
+          description: "User Establishments Details"
+          in: body
+          schema:
+            "$ref": "#/definitions/userEstablishments"
+          required: true
+      responses:
+        "200":
+          description: User establishment creates successfully
+          schema:
+            "$ref": "#/definitions/RoleCreateSuccess"
+        "401":
+          description: GEN-UNAUTHORIZED
+        "204":
+          description: User establishment not found
+
+    get:
+      tags:
+        - Users
+      summary: Get All Users Establishment
+      description: Get All Users Establishment API
+      operationId: getUsersEstablishment
+      security:
+        - Bearer: []
+      parameters:
+        - name: user_id
+          description: "user Id"
+          in: query
+        - name: establishment_id
+          description: "user establishmentId"
+          in: query
+        - name: page_no
+          description: "Page no"
+          in: query
+        - name: page_size
+          description: "Page Size"
+          in: query
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "200":
+          description: Users Establishment fetched Successfully
+        "500":
+          description: Something went wrong
+      x-codegen-request-body-name: User Establishment Information
+
+  "/v1/user-establishments/{id}":
+    delete:
+      tags:
+        - Users
+      summary: Delete User Establishment
+      description: Delete User Establishment by id
+      operationId: UserEstablishment
+      parameters:
+        - name: id
+          in: path
+          description: User Establishment Id
+          required: true
+          schema:
+            type: integer
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: User Establishment Information
+          schema:
+            "$ref": "#/definitions/RoleCreateSuccess"
+        "400":
+          description: Something went wrong
+        "401":
+          description: GEN-UNAUTHORIZED
+
+  "/v1/users/{userId}/answer":
+    post:
+      tags:
+        - Users
+      summary: Add User Answer
+      description: Add User Answer
+      operationId: AddUserAnswer
+      security:
+        - Bearer: []
+      parameters:
+        - name: userId
+          in: path
+          description: User Id
+          required: true
+          schema:
+            type: integer
+        - name: User Answer Details
+          description: "User Answer Details"
+          in: body
+          schema:
+            "$ref": "#/definitions/userAnswer"
+          required: true
+      responses:
+        "200":
+          description: User Answer added successfully
+          schema:
+            "$ref": "#/definitions/RoleCreateSuccess"
+        "401":
+          description: GEN-UNAUTHORIZED
+        "204":
+          description: User Answer not found
+
+  "/v1/questions":
+    get:
+      tags:
+        - Users
+      summary: Get all questions
+      description: Get all questions
+      operationId: GetQuestionsDetails
+      responses:
+        "200":
+          description: Questions Details
+          schema:
+            "$ref": "#/definitions/RoleCreateSuccess"
+        "401":
+          description: GEN-UNAUTHORIZED
+        "204":
+          description: Questions not found
+
+  "/v1/parentEstablishments":
+    post:
+      tags:
+        - Parent_Establishment
+      summary: Create a Parent Establishment
+      description: Create a Parent Establishment API
+      operationId: createParent
+      security:
+        - Bearer: []
+      parameters:
+        - name: Parent Details
+          description: "Parent Details"
+          in: body
+          schema:
+            "$ref": "#/definitions/parentSchema"
+          required: true
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "201":
+          description: User Response
+          schema:
+            "$ref": "#/definitions/CreateSuccess"
+        "400":
+          description: Something went wrong
+    get:
+      tags:
+        - Parent_Establishment
+      summary: Get All Parent Establishments
+      description: Get All Parent Establishments API
+      operationId: getParents
+      security:
+        - Bearer: []
+      parameters:
+        - name: searchText
+          description: "Search filter"
+          in: query
+        - name: page_no
+          description: "Page no"
+          in: query
+        - name: page_size
+          description: "Page Size"
+          in: query
+        - name: status
+          description: "status of parent such as 'Deleted', 'Active', 'Inactive' and send null for all status"
+          in: query
+        - name: onlyUserEstablishment
+          description: "only user establishment"
+          in: query
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "200":
+          description: Users fetched Successfully
+        "500":
+          description: Something went wrong
+      x-codegen-request-body-name: User Information
+  "/v1/parentEstablishments/{id}":
+    patch:
+      tags:
+        - Parent_Establishment
+      summary: Update a Parent_Establishment's details
+      description: Update a Parent_Establishment API
+      operationId: UpdateParent
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          description: Parent Id
+          required: true
+          schema:
+            type: integer
+        - name: Parent Details
+          in: body
+          description: Parent Details
+          schema:
+            "$ref": "#/definitions/parentUpdateSchema"
+          required: true
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "200":
+          description: User Information
+          schema:
+            "$ref": "#/definitions/CreateSuccess"
+        "400":
+          description: Something went wrong
+    get:
+      tags:
+        - Parent_Establishment
+      summary: Get a Parent Establishment's details
+      description: Get a Parent Establishment API
+      operationId: GetParent
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          description: Parent Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "200":
+          description: Parent Information
+          schema:
+            "$ref": "#/definitions/CreateSuccess"
+        "400":
+          description: Something went wrong
+  "/v1/parentEstablishments/{id}/roles":
+    get:
+      tags:
+        - Parent_Establishment
+      summary: get a Parent_Establishment's roles details
+      description: get a Parent_Establishment's roles API
+      operationId: GetParentRoles
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          description: Parent Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "200":
+          description: User Information
+          schema:
+            "$ref": "#/definitions/CreateSuccess"
+        "400":
+          description: Something went wrong
+  "/v1/parentEstablishments/{estParentId}/establishments":
+    post:
+      tags:
+        - Locations
+      summary: Create a Locations
+      description: Create a Locations API
+      operationId: createLocations
+      parameters:
+        - name: Locations Details
+          description: "Locations Details"
+          in: body
+          schema:
+            "$ref": "#/definitions/LocationsSchema"
+          required: true
+        - name: estParentId
+          description: "Parent id"
+          in: path
+          required: true
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "201":
+          description: Location Response
+          schema:
+            "$ref": "#/definitions/CreateSuccess"
+        "400":
+          description: Something went wrong
+    get:
+      tags:
+        - Locations
+      summary: Get All Locations
+      description: Get All Locations API
+      operationId: getLocations
+      security:
+        - Bearer: []
+      parameters:
+        - name: searchText
+          description: "Search filter"
+          in: query
+        - name: page_no
+          description: "Page no"
+          in: query
+        - name: page_size
+          description: "Page Size"
+          in: query
+        - name: estParentId
+          description: "Parent id"
+          in: path
+          required: true
+        - name: status
+          description: "filter"
+          in: query
+          type: string
+          enum:
+            - Inactive
+            - Active
+            - Deleted
+        - name: onlyUserEstablishment
+          description: "only user establishment"
+          in: query
+        - name: user_id
+          description: "user_id"
+          in: query
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "200":
+          description: Users fetched Successfully
+        "500":
+          description: Something went wrong
+      x-codegen-request-body-name: User Information
+  "/v1/parentEstablishments/{estParentId}/establishments/{estId}":
+    patch:
+      tags:
+        - Locations
+      summary: Update a Locations's details
+      description: Update a Locations API
+      operationId: UpdateLocations
+      security:
+        - Bearer: []
+      parameters:
+        - name: estId
+          in: path
+          description: Locations Id
+          required: true
+          schema:
+            type: integer
+        - name: estParentId
+          description: "Parent id"
+          in: path
+          required: true
+        - name: Locations Details
+          in: body
+          description: Locations Details
+          schema:
+            "$ref": "#/definitions/LocationsUpdateSchema"
+          required: true
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "200":
+          description: Location Information
+          schema:
+            "$ref": "#/definitions/CreateSuccess"
+        "400":
+          description: Something went wrong
+    get:
+      tags:
+        - Locations
+      summary: Get a Location's details
+      description: Get a Location API
+      operationId: GetLocation
+      security:
+        - Bearer: []
+      parameters:
+        - name: estId
+          in: path
+          description: Location Id
+          required: true
+          schema:
+            type: integer
+        - name: estParentId
+          description: "Parent id"
+          in: path
+          required: true
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "200":
+          description: location Information
+          schema:
+            "$ref": "#/definitions/CreateSuccess"
+        "400":
+          description: Something went wrong
+  "/v1/parentEstablishments/establishments/login":
+    post:
+      tags:
+        - Locations
+      summary: Login a Location
+      description: Login a Location API
+      operationId: LoginLocations
+      parameters:
+        - name: data
+          description: "Location key"
+          in: body
+          schema:
+            "$ref": "#/definitions/LocationLoginSchema"
+          required: true
+      responses:
+        "200":
+          description: Location Response
+          schema:
+            "$ref": "#/definitions/CreateSuccess"
+        "400":
+          description: Something went wrong
+  "/v1/parentEstablishments/{estParentId}/establishments/users":
+    get:
+      tags:
+        - Locations
+      summary: Get All Users of Location
+      description: Get All Users of Location API
+      operationId: getLocationsUsers
+      security:
+        - Bearer: []
+      parameters:
+        - name: query
+          description: "Search filter"
+          in: query
+        - name: estParentId
+          description: "Parent id"
+          in: path
+          required: true
+        - name: status
+          description: "filter"
+          in: query
+          type: string
+          enum:
+            - Active
+            - Deleted
+        - name: type
+          description: "User role id"
+          in: query
+        - name: page_no
+          description: "Page no"
+          in: query
+        - name: page_size
+          description: "Page Size"
+          in: query
+        - name: estIdentifyingKey
+          description: "establishment id"
+          in: query
+          required: true
+        - name: include
+          description: "training"
+          in: query
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "200":
+          description: Users fetched Successfully
+        "500":
+          description: Something went wrong
+      x-codegen-request-body-name: User Information
+  "/v1/parentEstablishments/{estParentId}/establishments/{estId}/users/{userId}/items":
+    get:
+      tags:
+        - Locations
+      summary: Get hotlist of users
+      description: Get hotlist of users API
+      operationId: getHotlist
+      security:
+        - Bearer: []
+      parameters:
+        - name: estId
+          description: "est id"
+          in: path
+        - name: estParentId
+          description: "Parent id"
+          in: path
+          required: true
+        - name: userId
+          description: "user id"
+          in: path
+          type: string
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "200":
+          description: Users fetched Successfully
+        "500":
+          description: Something went wrong
+      x-codegen-request-body-name: User Information
+  "/v1/parentEstablishments/{estParentId}/establishments/{estId}/forms":
+    get:
+      tags:
+        - Locations
+      summary: Get forms of establishment
+      description: Get forms of establishment API
+      operationId: getForms
+      security:
+        - Bearer: []
+      parameters:
+        - name: estId
+          description: "est id"
+          in: path
+        - name: estParentId
+          description: "Parent id"
+          in: path
+          required: true
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "200":
+          description: Users fetched Successfully
+        "500":
+          description: Something went wrong
+      x-codegen-request-body-name: User Information
+  "/v1/parentEstablishments/{estParentId}/establishments/{estId}/form/{id}":
+    patch:
+      tags:
+        - Locations
+      summary: put forms of establishment
+      description: put forms of establishment API
+      operationId: putForms
+      security:
+        - Bearer: []
+      parameters:
+        - name: estId
+          description: "est id"
+          in: path
+        - name: estParentId
+          description: "Parent id"
+          in: path
+          required: true
+        - name: id
+          description: "id of establishment form"
+          in: path
+          required: true
+        - name: data
+          description: "body data"
+          in: body
+          schema:
+            "$ref": "#/definitions/formFill"
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "200":
+          description: Users fetched Successfully
+        "500":
+          description: Something went wrong
+      x-codegen-request-body-name: User Information
+  "/v1/parentEstablishments/{estParentId}/establishments/{estId}/users/{userId}/history":
+    get:
+      tags:
+        - Locations
+      summary: Get history of establishment user
+      description: Get history of establishment user API
+      operationId: getHistory
+      security:
+        - Bearer: []
+      parameters:
+        - name: estId
+          description: "est id"
+          in: path
+        - name: estParentId
+          description: "Parent id"
+          in: path
+          required: true
+        - name: userId
+          description: "user id"
+          in: path
+          required: true
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "200":
+          description: Users fetched Successfully
+        "500":
+          description: Something went wrong
+      x-codegen-request-body-name: User Information
+  "/v1/parentEstablishments/{estParentId}/establishments/{estId}/users/{userId}/activities":
+    get:
+      tags:
+        - Locations
+      summary: Get activity of establishment user
+      description: Get activity of establishment user API
+      operationId: getActivity
+      security:
+        - Bearer: []
+      parameters:
+        - name: estId
+          description: "est id"
+          in: path
+        - name: estParentId
+          description: "Parent id"
+          in: path
+          required: true
+        - name: userId
+          description: "user id"
+          in: path
+          required: true
+      responses:
+        "401":
+          description: GEN-UNAUTHORIZED
+        "200":
+          description: Users fetched Successfully
+        "500":
+          description: Something went wrong
+      x-codegen-request-body-name: User Information
+
+  "/v1/users/_forgot-password":
+    patch:
+      tags:
+        - Users
+      summary: Send an email for reset password
+      description: Update a user's Checklist
+      operationId: forgotPass
+      parameters:
+        - name: type
+          description: "send this BROKER or SUPERADMIN"
+          in: query
+        - name: checklist Details
+          in: body
+          description: "Role Details"
+          schema:
+            "$ref": "#/definitions/forgotPasswordSchema"
+          required: true
+      responses:
+        "200":
+          description: checklist Information
+          content:
+            application/json:
+              schema:
+                "$ref": "#/definitions/RoleCreateSuccess"
+        "400":
+          description: Something went wrong
+        "401":
+          description: GEN-UNAUTHORIZED
+  "/v1/users/_admin-reset-password":
+    patch:
+      tags:
+        - Users
+      summary: For reset password on admin portal
+      description: Update a user's Checklist
+      operationId: resetPass
+      parameters:
+        - name: checklist Details
+          in: body
+          description: "Role Details"
+          schema:
+            "$ref": "#/definitions/adminResetSchema"
+          required: true
+      responses:
+        "200":
+          description: checklist Information
+          content:
+            application/json:
+              schema:
+                "$ref": "#/definitions/RoleCreateSuccess"
+        "400":
+          description: Something went wrong
+        "401":
+          description: GEN-UNAUTHORIZED
+
+definitions:
+  adminResetSchema:
+    type: object
+    required:
+      - resetPasswordToken
+      - password
+    properties:
+      password:
+        type: string
+      resetPasswordToken:
+        type: string
+  forgotPasswordSchema:
+    type: object
+    required:
+      - email
+    properties:
+      email:
+        type: string
+        description: User email
+  userSchema:
+    type: object
+    required:
+      - userFirstName
+      - userLastName
+      - userPosition
+      - password
+    properties:
+      userFirstName:
+        type: string
+        description: User first name
+      userLastName:
+        type: string
+        description: User last name
+      userEmailId:
+        type: string
+        description: User email
+      userContactNumber:
+        type: string
+        description: User contact
+      userPosition:
+        type: number
+        description: User position
+      userRoleId:
+        type: number
+        description: Role id
+      password:
+        type: string
+        description: User password
+      estIdentifyingKey:
+        type: string
+        description: 10 digit establishment id
+      withinEst:
+        type: boolean
+        description: Use this when users are addining within establishments
+      countryIsoCode:
+        type: string
+      countryIsdCode:
+        type: string
+      answers:
+        type: array
+        description: object contains answer and questionId
+        items:
+          type: object
+  userAnswer:
+    type: object
+    properties:
+      answers:
+        type: array
+        description: object contains answer and questionId
+        items:
+          type: object
+          properties:
+            answer:
+              type: string
+            questionId:
+              type: number
+  userEstablishments:
+    type: object
+    required:
+      - userId
+      - establishmentIds
+    properties:
+      userEstablishment:
+        type: array
+        description: object contains userId and establishmentId
+        items:
+          type: object
+          properties:
+            userId:
+              type: number
+            establishmentIds:
+              type: array
+              description: object contains establishmentId
+              items:
+                type: number
+  roleSchema:
+    type: object
+    properties:
+      roleName:
+        type: string
+      passwordType:
+        type: string
+      isAppRole:
+        type: boolean
+      isLocationSpecific:
+        type: boolean
+  roleUpdateSchema:
+    type: object
+    properties:
+      passwordType:
+        type: string
+      isActive:
+        type: boolean
+      isAppRole:
+        type: boolean
+      isLocationSpecific:
+        type: boolean
+  userUpdateSchema:
+    type: object
+    properties:
+      userFirstName:
+        type: string
+      userLastName:
+        type: string
+      userEmailId:
+        type: string
+      userContactNumber:
+        type: string
+      userPosition:
+        type: number
+        description: User position
+      isDeleted:
+        type: boolean
+        description: Used for deletion of a user
+      countryIsoCode:
+        type: string
+      countryIsdCode:
+        type: string
+      textBox:
+        type: string
+      isChecked:
+        type: boolean
+      answers:
+        type: array
+        description: object contains answerId,answer and questionId
+        items:
+          type: object
+      deleteAnswers:
+        type: array
+        description: object contains answerId
+        items:
+          type: number
+  userAnswerSchema:
+    type: object
+    properties:
+      questionId:
+        type: number
+      answer:
+        type: string
+  RoleCreateSuccess:
+    type: object
+    properties:
+      success:
+        type: boolean
+      statusCode:
+        type: number
+      message:
+        type: string
+  CreateSuccess:
+    type: object
+    properties:
+      success:
+        type: boolean
+      statusCode:
+        type: number
+      data:
+        type: object
+  userLoginSchema:
+    type: object
+    properties:
+      user:
+        type: string
+        description: Login user from email
+      type:
+        type: string
+        description: Type of user
+        enum:
+          - admin
+          - user
+          - broker
+      password:
+        type: string
+        description: Password of user
+  parentSchema:
+    type: object
+    required:
+      - estParentName
+    properties:
+      estParentName:
+        type: string
+        description: Name of parent establishment
+      imageLink:
+        type: string
+        description: link of uploaded gif/image
+      accentColorFirst:
+        type: string
+        description: accent color first
+      accentColorSecond:
+        type: string
+        description: accent color second
+      roles:
+        type: array
+        description: object contains id of roles
+        items:
+          type: object
+  userTrainingUpdateSchema:
+    type: object
+    properties:
+      isCompleted:
+        type: boolean
+      startedOn:
+        type: string
+        description: Send date format
+      completedOn:
+        type: string
+        description: Send date format
+      lastAccessedOn:
+        type: string
+        description: Send date format when user view training data
+      durationCompleted:
+        type: string
+        description: Send date format of user training compeletion
+      chapterCompleted:
+        type: number
+      chapterAssign:
+        type: number
+      isActive:
+        type: boolean
+        description: send false if need to delete data
+      trainingStatus:
+        type: string
+        enum:
+          - NOT_STARTED
+          - COMPLETED
+          - IN_PROGRESS
+      markAbsent:
+        type: boolean
+        description: send true if a training needs to be skip
+      resumeSession:
+        type: object
+        description: object containing details
+  userChecklistUpdateSchema:
+    type: object
+    properties:
+      checklistResponse:
+        type: object
+        description: this is for response record of user checklist
+      isActive:
+        type: boolean
+        description: send false if need to delete data
+      isCompleted:
+        type: boolean
+  parentUpdateSchema:
+    type: object
+    properties:
+      estParentName:
+        type: string
+        description: Name of parent establishment
+      status:
+        type: string
+        description: Used for deletion of a parent
+        enum:
+          - Inactive
+          - Active
+          - Deleted
+      imageLink:
+        type: string
+        description: link of uploaded gif/image
+      accentColorFirst:
+        type: string
+        description: accent color first
+      accentColorSecond:
+        type: string
+        description: accent color second
+      deleteLinks:
+        type: array
+        description: Contains links to delete
+        items:
+          type: string
+  feedBackData:
+    type: object
+    required:
+      - estId
+      - feedback
+    properties:
+      estId:
+        type: number
+        description: send value of estIdentifyingKey from user object
+      feedback:
+        type: string
+        description: feedback from user
+    roles:
+      type: array
+      description: object contains id of roles
+      items:
+        type: object
+    deleteRoles:
+      type: array
+      items:
+        type: integer
+  LocationsSchema:
+    type: object
+    required:
+      - estName
+      - estParentId
+      - estIdentifyingKey
+      - userFirstName
+      - userLastName
+      - password
+    properties:
+      estName:
+        type: string
+        description: Name of location
+      estEmailId:
+        type: string
+        description: Email
+      estContactNumber:
+        type: string
+      addressLine1:
+        type: string
+      addressLine2:
+        type: string
+      city:
+        type: string
+      state:
+        type: string
+      country:
+        type: string
+      zipcode:
+        type: string
+      estParentId:
+        type: string
+      estIdentifyingKey:
+        type: string
+        description: 10 digit unique location key
+      userFirstName:
+        type: string
+        description: First name of saftey lead
+      userLastName:
+        type: string
+        description: Last name of saftey lead
+      userContactNumber:
+        type: string
+      userEmailId:
+        type: string
+      password:
+        type: string
+      estFeedbackEmailId:
+        type: string
+        description: Email for feedback
+      estBrandName:
+        type: string
+        description: Brand Name
+      countryIsoCode:
+        type: string
+      countryIsdCode:
+        type: string
+      estCountryIsoCode:
+        type: string
+      estCountryIsdCode:
+        type: string
+  LocationsUpdateSchema:
+    type: object
+    properties:
+      estName:
+        type: string
+        description: Name of location
+      estEmailId:
+        type: string
+        description: Email
+      estContactNumber:
+        type: string
+      addressLine1:
+        type: string
+      addressLine2:
+        type: string
+      city:
+        type: string
+      state:
+        type: string
+      country:
+        type: string
+      zipcode:
+        type: string
+      status:
+        type: string
+        description: Used for deletion of a location
+        enum:
+          - Inactive
+          - Active
+          - Deleted
+      estFeedbackEmailId:
+        type: string
+        description: Email for feedback
+      estBrandName:
+        type: string
+        description: Brand Name
+      estCountryIsoCode:
+        type: string
+      estCountryIsdCode:
+        type: string
+  passwordUpdateSchema:
+    type: object
+    properties:
+      userRoleId:
+        type: string
+        description: Role id of user
+      password:
+        type: string
+        description: User password
+  passwordChangeSchema:
+    type: object
+    properties:
+      userRoleId:
+        type: string
+        description: Role id of user
+      password:
+        type: string
+        description: User password
+      oldPassword:
+        type: string
+        description: Old Password of user
+  LocationLoginSchema:
+    type: object
+    properties:
+      estIdentifyingKey:
+        type: string
+  formFill:
+    type: object
+    properties:
+      formData:
+        type: object
+      status:
+        type: string
+        enum:
+          - NOT_STARTED
+          - COMPLETED
+          - IN_PROGRESS
+      formUrl:
+        type: string

@@ -1,0 +1,181 @@
+{
+    "defaultSeverity": "error",
+    "linterOptions": {
+        "exclude": [
+            "node_modules",
+            "src/resources/swagger"
+        ]
+    },
+    "rules": {
+        "no-unnecessary-type-assertion": true,
+        "array-type": [
+            true,
+            "array"
+        ],
+        "no-duplicate-imports": true,
+        "ban": [
+            true,
+            "setInterval",
+            "setTimeout"
+        ],
+        "ban-types": {
+            "options": [
+                [
+                    "Object",
+                    "Avoid using the `Object` type. Did you mean `object`?"
+                ],
+                [
+                    "Function",
+                    "Avoid using the `Function` type. Prefer a specific function type, like `() => void`, or use `ts.AnyFunction`."
+                ],
+                [
+                    "Boolean",
+                    "Avoid using the `Boolean` type. Did you mean `boolean`?"
+                ],
+                [
+                    "Number",
+                    "Avoid using the `Number` type. Did you mean `number`?"
+                ],
+                [
+                    "String",
+                    "Avoid using the `String` type. Did you mean `string`?"
+                ]
+            ]
+        },
+        "class-name": true,
+        "comment-format": [
+            true,
+            "check-space"
+        ],
+        "curly": [
+            true,
+            "ignore-same-line"
+        ],
+        "indent": [
+            true,
+            "tabs",
+            4
+        ],        
+        "interface-name": [
+            true,
+            "never-prefix"
+        ],
+        "import-spacing": true,
+        "interface-over-type-literal": true,
+        "jsdoc-format": true,
+        "linebreak-style": [
+            true,
+            "LF"
+        ],
+        "no-eval": true,
+        "no-inferrable-types": true,
+        "no-internal-module": true,
+        "no-sparse-arrays": true,
+        "no-switch-case-fall-through": true,
+        "no-trailing-whitespace": [
+            true,
+            "ignore-template-strings"
+        ],
+        "no-unnecessary-class": [
+            true,
+            "allow-static-only"
+        ],
+        "new-parens": true,
+        "no-unnecessary-qualifier": true,
+        "no-var-keyword": true,
+        "object-literal-shorthand": true,
+        "one-line": [
+            true,
+            "check-open-brace",
+            "check-whitespace",
+            "check-catch",
+            "check-else",
+            "check-finally"
+        ],
+        "number-literal-format": true,
+        "prefer-const": true,
+        "quotemark": [
+            true,
+            "single",
+            "avoid-escape"
+        ],
+        "one-variable-per-declaration": [
+            true,
+            "ignore-for-loop"
+        ],
+        "semicolon": [
+            true,
+            "always",
+            "ignore-bound-class-methods"
+        ],
+        "use-isnan": true,
+        "prefer-switch": true,
+        "prefer-template": true,
+        "max-line-length": [true, 200],
+        "space-within-parens": true,
+        "eofline": true,
+        "no-consecutive-blank-lines": true,
+        "triple-equals": true,
+        "no-empty-interface": true,
+        "typedef-whitespace": [
+            true,
+            {
+                "call-signature": "nospace",
+                "index-signature": "nospace",
+                "parameter": "nospace",
+                "property-declaration": "nospace",
+                "variable-declaration": "nospace"
+            },
+            {
+                "call-signature": "onespace",
+                "index-signature": "onespace",
+                "parameter": "onespace",
+                "property-declaration": "onespace",
+                "variable-declaration": "onespace"
+            }
+        ],
+        "whitespace": [
+            true,
+            "check-branch",
+            "check-decl",
+            "check-operator",
+            "check-module",
+            "check-separator",
+            "check-type"
+        ],
+        "no-implicit-dependencies": [
+            true,
+            "dev"
+        ],
+        "object-literal-key-quotes": [
+            true,
+            "consistent-as-needed"
+        ],
+        "arrow-parens": false,
+        "arrow-return-shorthand": false,
+        "forin": false,
+        "member-access": false,
+        "no-conditional-assignment": false,
+        "no-console": false,
+        "no-debugger": false,
+        "no-object-literal-type-assertion": false,
+        "no-shadowed-variable": false,
+        "no-submodule-imports": false,
+        "no-var-requires": false,
+        "ordered-imports": false,
+        "prefer-conditional-expression": false,
+        "radix": false,
+        "trailing-comma": false,
+        "align": false,
+        "space-before-function-paren": false,
+        "ban-comma-operator": false,
+        "max-classes-per-file": false,
+        "member-ordering": false,
+        "no-null-keyword": false,
+        "no-angle-bracket-type-assertion": false,
+        "no-bitwise": false,
+        "no-namespace": false,
+        "no-reference": false,
+        "object-literal-sort-keys": false
+    }
+}
